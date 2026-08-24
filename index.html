@@ -140,7 +140,7 @@ input,select{width:100%;padding:12px 13px;border:1px solid var(--line);border-ra
 <div class="card">
 <div class="field" style="margin-bottom:16px"><label>Subject <span class="muted">(optional)</span></label><input id="noteSubject" placeholder="e.g. Mathematics, Biology"></div>
 <div id="dropZone" class="upload"><div class="upload-icon">📚</div><h2>Drop your study material here</h2><p>or choose a PDF, JPG, JPEG, or PNG file</p><input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png" hidden><button class="btn primary" id="chooseFile">Choose file</button><div id="fileName" class="muted" style="margin-top:12px"></div></div>
-<div id="uploadActions" class="hidden" style="margin-top:18px"><div class="grid two"><div><h3>Study material ready</h3><p class="muted">Grok will read your file and generate a summary and quiz from it.</p></div><button class="btn primary" id="processBtn"><span id="processLabel">Generate summary & quiz</span></button></div>
+<div id="uploadActions" class="hidden" style="margin-top:18px"><div class="grid two"><div><h3>Study material ready</h3><p class="muted">Gemini will read your file and generate a summary and quiz from it.</p></div><button class="btn primary" id="processBtn"><span id="processLabel">Generate summary & quiz</span></button></div>
 <p id="processError" class="error-text hidden" style="margin-top:12px"></p>
 </div>
 </div></section>
@@ -225,7 +225,7 @@ async function api(path, { method = "GET", body, isForm = false } = {}) {
   try { data = await res.json(); } catch (e) { /* no body */ }
 
   if (!res.ok) {
-    const message = (data && data.message) || `Request failed (${res.status})`;
+    const message = (data && (data.error || data.message)) || `Request failed (${res.status})`;
     throw new Error(message);
   }
   return data;
