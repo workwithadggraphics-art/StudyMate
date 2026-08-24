@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="StudyMate - your intelligent study companion">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>StudyMate</title>
+<style>
+:root{
+  --blue:#2563eb;--blue2:#1d4ed8;--navy:#0f172a;--muted:#64748b;
+  --bg:#f5f8ff;--card:#fff;--line:#e2e8f0;--green:#10b981;
+  --amber:#f59e0b;--danger:#ef4444;--radius:20px;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--navy)}
+button,input,select{font:inherit} button{cursor:pointer;border:0}
+.hidden{display:none!important}.app{min-height:100vh}.topbar{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px}.logo{width:40px;height:40px;border-radius:13px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900}
+.user-chip{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}.avatar{width:36px;height:36px;border-radius:50%;background:#dbeafe;color:var(--blue);display:grid;place-items:center;font-weight:800}
+.layout{display:grid;grid-template-columns:245px 1fr;min-height:calc(100vh - 70px)}aside{background:#fff;border-right:1px solid var(--line);padding:20px 14px}
+.nav{display:grid;gap:7px}.nav button{background:transparent;text-align:left;padding:12px 14px;border-radius:12px;color:#475569}.nav button.active,.nav button:hover{background:#eff6ff;color:var(--blue);font-weight:700}
+main{padding:28px;max-width:1400px;width:100%;margin:auto}.page{display:none}.page.active{display:block}.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.hero h1{margin:0 0 7px;font-size:32px}.hero p{margin:0;color:var(--muted)}
+.btn{padding:11px 16px;border-radius:12px;font-weight:700}.primary{background:var(--blue);color:#fff}.primary:hover{background:var(--blue2)}.soft{background:#eff6ff;color:var(--blue)}.danger{background:#fee2e2;color:#b91c1c}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.grid{display:grid;gap:18px}.stats{grid-template-columns:repeat(4,1fr)}.two{grid-template-columns:1.2fr .8fr}.three{grid-template-columns:repeat(3,1fr)}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 8px 25px rgba(15,23,42,.04)}.stat-label{font-size:13px;color:var(--muted)}.stat-value{font-size:28px;font-weight:800;margin:8px 0}.stat-note{font-size:13px;color:var(--green)}
+.section-title{font-size:18px;margin:0 0 15px}.quick{display:flex;align-items:center;gap:14px}.icon{width:44px;height:44px;border-radius:13px;background:#eff6ff;color:var(--blue);display:grid;place-items:center;font-size:20px}.quick h3{margin:0 0 4px;font-size:16px}.quick p{margin:0;color:var(--muted);font-size:13px}
+.progress{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--blue);border-radius:99px}.bar-row{margin:14px 0}.bar-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}
+.upload{border:2px dashed #93c5fd;background:#f8fbff;border-radius:18px;padding:45px 20px;text-align:center}.upload.drag{background:#eff6ff}.upload-icon{font-size:38px}.upload h2{margin:10px 0 5px}.upload p{color:var(--muted);margin:0 0 17px}
+input,select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}input:focus,select:focus{border-color:#93c5fd;box-shadow:0 0 0 3px #dbeafe}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.list{display:grid;gap:10px}.task{display:flex;align-items:center;justify-content:space-between;padding:13px;border:1px solid var(--line);border-radius:13px}.task-left{display:flex;gap:11px;align-items:center}.task input{width:auto}.muted{color:var(--muted)}.tag{display:inline-block;padding:5px 8px;border-radius:8px;font-size:11px;font-weight:700;background:#eff6ff;color:var(--blue)}
+.quiz-question{font-weight:750;font-size:17px;margin-bottom:12px}.options{display:grid;gap:9px}.option{padding:12px;border:1px solid var(--line);border-radius:11px;text-align:left;background:#fff}.option.selected{border-color:var(--blue);background:#eff6ff}.option.correct{border-color:var(--green);background:#ecfdf5}.option.wrong{border-color:var(--danger);background:#fef2f2}
+.score{width:130px;height:130px;border-radius:50%;border:13px solid #dbeafe;display:grid;place-items:center;margin:auto;font-size:28px;font-weight:850;color:var(--blue)}
+.recommend{display:flex;gap:12px;padding:13px;border-radius:13px;background:#f8fafc;margin-bottom:9px}.recommend strong{display:block}.recommend p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.login-screen{min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(135deg,#eff6ff,#f8fafc)}.login-box{width:min(430px,100%);background:#fff;border:1px solid var(--line);border-radius:25px;padding:30px;box-shadow:0 20px 60px rgba(37,99,235,.12)}.login-box .brand{justify-content:center;margin-bottom:25px}.login-box h1{text-align:center;margin:0 0 7px}.login-box>p{text-align:center;color:var(--muted);margin:0 0 25px}.login-form{display:grid;gap:14px}.login-form .btn{width:100%;margin-top:5px}.demo{margin-top:14px;text-align:center;font-size:12px;color:var(--muted)}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--navy);color:#fff;padding:13px 17px;border-radius:12px;display:none;z-index:50;max-width:320px}.toast.show{display:block}
+.error-text{color:var(--danger);font-size:13px;margin:0}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:middle;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* PWA install banner */
+.install-banner{position:fixed;left:16px;right:16px;bottom:16px;max-width:460px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 15px 40px rgba(15,23,42,.18);display:flex;align-items:center;gap:13px;z-index:60}
+.install-banner .logo{flex-shrink:0}
+.install-banner .txt{flex:1;min-width:0}
+.install-banner .txt strong{display:block;font-size:14px}
+.install-banner .txt span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.install-banner .actions{display:flex;gap:8px;flex-shrink:0}
+.install-banner .btn{padding:9px 13px;font-size:13px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{position:fixed;bottom:0;left:0;right:0;height:66px;padding:7px 8px;z-index:20;border-top:1px solid var(--line);border-right:0}.nav{display:flex;justify-content:space-around}.nav button{font-size:11px;text-align:center;padding:8px}.nav button span{display:block;font-size:18px;margin-bottom:2px}main{padding:20px 15px 90px}.stats{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}.hero h1{font-size:25px}.install-banner{bottom:82px}}
+@media(max-width:520px){.topbar{padding:0 14px}.form-grid{grid-template-columns:1fr}.user-chip small{display:none}.card{padding:16px}}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="brand"><div class="logo">S</div> StudyMate</div>
+
+    <div id="authTabs" style="display:flex;gap:6px;background:#f1f5f9;padding:5px;border-radius:12px;margin-bottom:22px">
+      <button type="button" id="signupTab" class="btn primary" style="flex:1">Sign up</button>
+      <button type="button" id="loginTab" class="btn soft" style="flex:1">Log in</button>
+    </div>
+
+    <div id="signupView">
+      <h1>Create your account ✨</h1>
+      <p>New to StudyMate? Sign up first to get started.</p>
+      <form id="signupForm" class="login-form">
+        <div class="field"><label>Username</label><input id="signupUsername" required placeholder="Choose a username"></div>
+        <div class="field"><label>Password</label><input id="signupPassword" type="password" required placeholder="Create a password" minlength="4"></div>
+        <div class="field"><label>Class / Grade level</label>
+          <select id="signupClass" required>
+            <option value="">Select your class</option>
+            <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
+            <option>SS 1</option><option>SS 2</option><option>SS 3</option>
+          </select>
+        </div>
+        <div class="field" id="departmentField">
+          <label>Department <span class="muted">(Senior secondary only)</span></label>
+          <select id="signupDepartment">
+            <option value="">Select department</option>
+            <option>Science</option><option>Arts</option><option>Commercial</option>
+          </select>
+        </div>
+        <p id="signupError" class="error-text hidden"></p>
+        <button class="btn primary" type="submit" id="signupSubmit">Create StudyMate account</button>
+      </form>
+      <div class="demo">Already have an account? Tap <b>Log in</b> above.</div>
+    </div>
+
+    <div id="loginView" class="hidden">
+      <h1>Welcome back 👋</h1>
+      <p>Log in to continue your study journey.</p>
+      <form id="loginForm" class="login-form">
+        <div class="field"><label>Username</label><input id="username" required placeholder="Enter username"></div>
+        <div class="field"><label>Password</label><input id="password" type="password" required placeholder="Enter password"></div>
+        <p id="loginError" class="error-text hidden"></p>
+        <button class="btn primary" type="submit" id="loginSubmit">Log in to StudyMate</button>
+      </form>
+      <div class="demo">New to StudyMate? Tap <b>Sign up</b> above.</div>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+<header class="topbar"><div class="brand"><div class="logo">S</div> StudyMate</div><div class="user-chip"><small id="welcomeUser">Student</small><div class="avatar" id="avatar">S</div></div></header>
+<div class="layout">
+<aside><nav class="nav">
+<button class="active" data-page="dashboard"><span>⌂</span>Dashboard</button>
+<button data-page="upload"><span>↑</span>Upload Notes</button>
+<button data-page="summary"><span>▤</span>Summaries</button>
+<button data-page="quiz"><span>?</span>Quiz</button>
+<button data-page="results"><span>✓</span>Results</button>
+<button data-page="planner"><span>◷</span>Planner</button>
+<button data-page="recommendations"><span>★</span>Tips</button>
+<button id="logout"><span>↪</span>Logout</button>
+</nav></aside>
+
+<main>
+<section id="dashboard" class="page active">
+<div class="hero"><div><h1 id="greeting">Good afternoon!</h1><p>Keep going — small study sessions add up.</p></div><button class="btn primary" data-go="upload">+ Upload notes</button></div>
+<div class="grid stats">
+<div class="card"><div class="stat-label">Study streak</div><div class="stat-value" id="dashStreak">0 days</div><div class="stat-note">Keep it going</div></div>
+<div class="card"><div class="stat-label">Quiz average</div><div class="stat-value" id="dashScore">—</div><div class="stat-note">Take a quiz to start tracking</div></div>
+<div class="card"><div class="stat-label">Tasks completed</div><div class="stat-value" id="taskCount">0/0</div><div class="stat-note">Great progress</div></div>
+<div class="card"><div class="stat-label">Mastery</div><div class="stat-value" id="dashMastery">—</div><div class="stat-note">Keep practicing</div></div>
+</div>
+<div class="grid two" style="margin-top:18px">
+<div class="card"><h2 class="section-title">Quick actions</h2><div class="grid three">
+<div class="quick" data-go="upload" style="cursor:pointer"><div class="icon">↑</div><div><h3>Upload</h3><p>Turn notes into study tools.</p></div></div>
+<div class="quick" data-go="quiz" style="cursor:pointer"><div class="icon">?</div><div><h3>Take quiz</h3><p>Test what you know.</p></div></div>
+<div class="quick" data-go="planner" style="cursor:pointer"><div class="icon">◷</div><div><h3>Plan</h3><p>Organize your week.</p></div></div>
+</div></div>
+<div class="card"><h2 class="section-title">Subject progress</h2><div id="subjectProgress"><p class="muted">No quiz attempts yet — take a quiz to see progress by subject.</p></div>
+</div></div>
+</section>
+
+<section id="upload" class="page">
+<div class="hero"><div><h1>Upload your notes</h1><p>PDFs and images become real AI-generated summaries and quizzes.</p></div></div>
+<div class="card">
+<div class="field" style="margin-bottom:16px"><label>Subject <span class="muted">(optional)</span></label><input id="noteSubject" placeholder="e.g. Mathematics, Biology"></div>
+<div id="dropZone" class="upload"><div class="upload-icon">📚</div><h2>Drop your study material here</h2><p>or choose a PDF, JPG, JPEG, or PNG file</p><input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png" hidden><button class="btn primary" id="chooseFile">Choose file</button><div id="fileName" class="muted" style="margin-top:12px"></div></div>
+<div id="uploadActions" class="hidden" style="margin-top:18px"><div class="grid two"><div><h3>Study material ready</h3><p class="muted">Grok will read your file and generate a summary and quiz from it.</p></div><button class="btn primary" id="processBtn"><span id="processLabel">Generate summary & quiz</span></button></div>
+<p id="processError" class="error-text hidden" style="margin-top:12px"></p>
+</div>
+</div></section>
+
+<section id="summary" class="page">
+<div class="hero"><div><h1>Smart Summary</h1><p id="summarySubtitle">Upload a note to generate a personalized summary.</p></div><span class="tag">AI-generated</span></div>
+<div class="grid two"><div class="card"><h2 class="section-title">Key points</h2><ul id="summaryList"><li>Upload a note to generate a personalized summary.</li></ul></div>
+<div class="card"><h2 class="section-title">Important concepts</h2><div id="concepts"><span class="muted">Nothing yet</span></div></div></div>
+</section>
+
+<section id="quiz" class="page">
+<div class="hero"><div><h1>Practice Quiz</h1><p>Answer questions generated from your study material.</p></div><span id="quizStatus" class="tag">No quiz yet</span></div>
+<div id="quizBox" class="card"><p class="muted">Upload a note first to generate a quiz.</p></div>
+</section>
+
+<section id="results" class="page">
+<div class="hero"><div><h1>Quiz Results</h1><p>See what you know and what needs more attention.</p></div></div>
+<div class="grid two"><div class="card" style="text-align:center"><div class="score" id="scoreCircle">—</div><h2 id="resultTitle">No quiz taken yet</h2><p class="muted" id="resultText">Take a quiz to see your results here.</p></div>
+<div class="card"><h2 class="section-title">Capability analysis</h2><div class="bar-row"><div class="bar-head"><span>Strong topics</span><b id="strongPct">0%</b></div><div class="progress"><i id="strongBar" style="width:0%"></i></div></div><div class="bar-row"><div class="bar-head"><span>Needs attention</span><b id="weakPct">0%</b></div><div class="progress"><i id="weakBar" style="width:0%"></i></div></div><p class="muted" id="weakTopics">Take a quiz to see a breakdown.</p></div></div>
+</section>
+
+<section id="planner" class="page">
+<div class="hero"><div><h1>Study Planner</h1><p>Plan focused sessions and build consistent habits.</p></div></div>
+<div class="grid two"><div class="card"><h2 class="section-title">Add a study task</h2><form id="taskForm" class="grid"><input id="taskName" placeholder="e.g. Revise quadratic equations" required><input id="taskDate" type="date" required><button class="btn primary">Add task</button></form></div>
+<div class="card"><h2 class="section-title">Your progress</h2><div class="stat-value" id="plannerProgress">0%</div><div class="progress"><i id="plannerBar" style="width:0%"></i></div></div></div>
+<div class="card" style="margin-top:18px"><h2 class="section-title">Upcoming activities</h2><div id="taskList" class="list"></div></div>
+</section>
+
+<section id="recommendations" class="page">
+<div class="hero"><div><h1>Study Recommendations</h1><p>Simple actions to help you learn more effectively.</p></div></div>
+<div class="card">
+<div class="recommend"><div class="icon">🎯</div><div><strong>Review your weakest topic</strong><p>Spend 15–20 minutes revisiting the concept you missed most often.</p></div></div>
+<div class="recommend"><div class="icon">🧠</div><div><strong>Use active recall</strong><p>Close your notes and explain the idea in your own words before checking your answer.</p></div></div>
+<div class="recommend"><div class="icon">⏱</div><div><strong>Keep sessions consistent</strong><p>Short, regular study sessions can make your study routine easier to maintain.</p></div></div>
+<div class="recommend"><div class="icon">❓</div><div><strong>Practice more questions</strong><p>Take another quiz after reviewing weak areas and compare your progress.</p></div></div>
+</div></section>
+</main></div></div>
+<div id="toast" class="toast"></div>
+
+<div id="installBanner" class="install-banner hidden">
+  <div class="logo">S</div>
+  <div class="txt"><strong>Install StudyMate</strong><span id="installBannerText">Add it to your home screen for quick, full-screen access.</span></div>
+  <div class="actions">
+    <button class="btn soft" id="installDismiss">Not now</button>
+    <button class="btn primary" id="installAccept">Install</button>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+
+/* =========================================================
+   CONFIG — point this at your deployed Render backend URL
+   ========================================================= */
+const API_BASE = "https://YOUR-STUDYMATE-BACKEND.onrender.com/api";
+
+let token = localStorage.getItem("studymate_token") || null;
+let currentUser = JSON.parse(localStorage.getItem("studymate_user") || "null");
+let selectedFile = null;
+let currentQuiz = null; // { _id, questions, subject }
+let quizIndex = 0;
+let answers = [];
+
+function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800)}
+function showPage(id){$$(".page").forEach(p=>p.classList.toggle("active",p.id===id));$$(".nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo(0,0)}
+$$(".nav button[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$$("[data-go]").forEach(b=>b.onclick=()=>showPage(b.dataset.go));
+
+/* ---------------- API helper ---------------- */
+async function api(path, { method = "GET", body, isForm = false } = {}) {
+  const headers = {};
+  if (token) headers.Authorization = "Bearer " + token;
+  if (!isForm && body) headers["Content-Type"] = "application/json";
+
+  const res = await fetch(API_BASE + path, {
+    method,
+    headers,
+    body: isForm ? body : body ? JSON.stringify(body) : undefined,
+  });
+
+  let data = null;
+  try { data = await res.json(); } catch (e) { /* no body */ }
+
+  if (!res.ok) {
+    const message = (data && data.message) || `Request failed (${res.status})`;
+    throw new Error(message);
+  }
+  return data;
+}
+
+/* ---------------- Auth ---------------- */
+function updateDepartment(){
+  const senior=["SS 1","SS 2","SS 3"].includes($("#signupClass").value);
+  $("#departmentField").classList.toggle("hidden",!senior);
+  $("#signupDepartment").disabled=!senior;
+  if(!senior) $("#signupDepartment").value="";
+}
+$("#signupClass").onchange=updateDepartment;
+updateDepartment();
+
+$("#signupTab").onclick=()=>{
+  $("#signupView").classList.remove("hidden"); $("#loginView").classList.add("hidden");
+  $("#signupTab").className="btn primary"; $("#loginTab").className="btn soft";
+};
+$("#loginTab").onclick=()=>{
+  $("#signupView").classList.add("hidden"); $("#loginView").classList.remove("hidden");
+  $("#signupTab").className="btn soft"; $("#loginTab").className="btn primary";
+};
+
+function setAuthError(id, message){
+  const el = $(id);
+  if (!message){ el.classList.add("hidden"); el.textContent=""; return; }
+  el.textContent = message; el.classList.remove("hidden");
+}
+
+async function openApp(user){
+  currentUser = user;
+  localStorage.setItem("studymate_user", JSON.stringify(user));
+  $("#welcomeUser").textContent = user.username;
+  $("#avatar").textContent = user.username[0].toUpperCase();
+  $("#loginScreen").classList.add("hidden");
+  $("#app").classList.remove("hidden");
+  showPage("dashboard");
+  toast("Welcome, " + user.username + "!");
+  maybeShowInstallBanner();
+  await Promise.all([loadDashboard(), loadTasks()]);
+}
+
+$("#signupForm").onsubmit = async e => {
+  e.preventDefault();
+  setAuthError("#signupError", null);
+  const btn = $("#signupSubmit");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Creating account…';
+  try {
+    const payload = {
+      username: $("#signupUsername").value.trim(),
+      password: $("#signupPassword").value,
+      classLevel: $("#signupClass").value,
+      department: $("#signupDepartment").value,
+    };
+    const data = await api("/auth/signup", { method: "POST", body: payload });
+    token = data.token;
+    localStorage.setItem("studymate_token", token);
+    await openApp(data.user);
+  } catch (err) {
+    setAuthError("#signupError", err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Create StudyMate account";
+  }
+};
+
+$("#loginForm").onsubmit = async e => {
+  e.preventDefault();
+  setAuthError("#loginError", null);
+  const btn = $("#loginSubmit");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Logging in…';
+  try {
+    const payload = { username: $("#username").value.trim(), password: $("#password").value };
+    const data = await api("/auth/login", { method: "POST", body: payload });
+    token = data.token;
+    localStorage.setItem("studymate_token", token);
+    await openApp(data.user);
+  } catch (err) {
+    setAuthError("#loginError", err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Log in to StudyMate";
+  }
+};
+
+$("#logout").onclick = () => {
+  token = null; currentUser = null;
+  localStorage.removeItem("studymate_token");
+  localStorage.removeItem("studymate_user");
+  $("#app").classList.add("hidden");
+  $("#loginScreen").classList.remove("hidden");
+  $("#loginTab").click();
+  $("#password").value = "";
+  toast("Logged out successfully.");
+};
+
+/* ---------------- Upload + AI processing ---------------- */
+$("#chooseFile").onclick=()=>$("#fileInput").click();
+$("#fileInput").onchange=e=>handleFile(e.target.files[0]);
+["dragenter","dragover"].forEach(x=>$("#dropZone").addEventListener(x,e=>{e.preventDefault();$("#dropZone").classList.add("drag")}));
+["dragleave","drop"].forEach(x=>$("#dropZone").addEventListener(x,e=>{e.preventDefault();$("#dropZone").classList.remove("drag")}));
+$("#dropZone").ondrop=e=>handleFile(e.dataTransfer.files[0]);
+
+function handleFile(file){
+  if(!file) return;
+  const ok=/(\.pdf|\.jpg|\.jpeg|\.png)$/i.test(file.name);
+  if(!ok){toast("Please select a PDF or image.");return}
+  selectedFile=file;
+  $("#fileName").textContent="Selected: "+file.name;
+  $("#uploadActions").classList.remove("hidden");
+  setAuthError("#processError", null);
+  toast("Study material added.");
+}
+
+$("#processBtn").onclick = async () => {
+  if (!selectedFile) return;
+  setAuthError("#processError", null);
+  const btn = $("#processBtn");
+  btn.disabled = true; $("#processLabel").innerHTML = '<span class="spinner"></span>Reading with Grok…';
+
+  try {
+    const form = new FormData();
+    form.append("file", selectedFile);
+    const subject = $("#noteSubject").value.trim();
+    if (subject) form.append("subject", subject);
+
+    const data = await api("/notes/process", { method: "POST", isForm: true, body: form });
+
+    $("#summarySubtitle").textContent = "Generated from " + data.note.fileName;
+    $("#summaryList").innerHTML = data.summary.keyPoints.map(p => `<li>${escapeHtml(p)}</li>`).join("");
+    $("#concepts").innerHTML = data.summary.concepts.map(c => `<span class="tag">${escapeHtml(c)}</span>`).join(" ");
+
+    currentQuiz = data.quiz;
+    quizIndex = 0; answers = [];
+    $("#quizStatus").textContent = `${currentQuiz.questions.length} questions`;
+
+    showPage("summary");
+    toast("Summary and quiz generated!");
+  } catch (err) {
+    setAuthError("#processError", err.message);
+  } finally {
+    btn.disabled = false; $("#processLabel").textContent = "Generate summary & quiz";
+  }
+};
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ---------------- Quiz ---------------- */
+$$(".nav button[data-page='quiz']").forEach(b => b.addEventListener("click", () => {
+  if (currentQuiz) renderQuestion();
+}));
+
+function renderQuestion(){
+  const q = currentQuiz.questions[quizIndex];
+  $("#quizBox").innerHTML = `<div class="muted" style="margin-bottom:10px">Question ${quizIndex+1} of ${currentQuiz.questions.length}</div><div class="quiz-question">${escapeHtml(q.q)}</div><div class="options">${q.o.map((x,i)=>`<button class="option" data-i="${i}">${escapeHtml(x)}</button>`).join("")}</div><div style="margin-top:18px;display:flex;justify-content:flex-end"><button class="btn primary" id="nextQ" disabled>${quizIndex===currentQuiz.questions.length-1?"Finish quiz":"Next question"}</button></div>`;
+  $$(".option").forEach(b=>b.onclick=()=>{
+    $$(".option").forEach(x=>x.classList.remove("selected"));
+    b.classList.add("selected");
+    answers[quizIndex]=+b.dataset.i;
+    $("#nextQ").disabled=false;
+  });
+  $("#nextQ").onclick=()=>{
+    if(quizIndex<currentQuiz.questions.length-1){quizIndex++;renderQuestion()}
+    else finishQuiz();
+  };
+}
+
+async function finishQuiz(){
+  $("#quizBox").innerHTML = '<p class="muted"><span class="spinner" style="border-color:rgba(37,99,235,.3);border-top-color:var(--blue)"></span>Scoring your quiz…</p>';
+  try {
+    const data = await api(`/quiz/${currentQuiz._id}/submit`, { method: "POST", body: { answers } });
+    const pct = data.percentage;
+    $("#scoreCircle").textContent = pct + "%";
+    $("#resultTitle").textContent = pct>=80?"Excellent work!":pct>=60?"Good work!":"Keep practicing!";
+    $("#resultText").textContent = `You got ${data.score} out of ${data.total} questions correct.`;
+    const weak = 100 - pct;
+    $("#strongPct").textContent = pct + "%";
+    $("#weakPct").textContent = weak + "%";
+    $("#strongBar").style.width = pct + "%";
+    $("#weakBar").style.width = weak + "%";
+    $("#weakTopics").textContent = weak ? "Review the questions you missed, then try another practice round." : "Great! Try a harder quiz to deepen your mastery.";
+    showPage("results");
+    toast("Quiz completed!");
+    renderQuestion(); // reset quiz page for a retake view
+    loadDashboard();
+  } catch (err) {
+    toast(err.message);
+    renderQuestion();
+  }
+}
+
+/* ---------------- Planner ---------------- */
+$("#taskForm").onsubmit = async e => {
+  e.preventDefault();
+  const name = $("#taskName").value, date = $("#taskDate").value;
+  try {
+    await api("/tasks", { method: "POST", body: { name, date } });
+    e.target.reset();
+    toast("Study task added.");
+    await loadTasks();
+  } catch (err) {
+    toast(err.message);
+  }
+};
+
+async function loadTasks(){
+  let tasks = [];
+  try { tasks = await api("/tasks"); } catch (err) { toast(err.message); return; }
+
+  const list = $("#taskList");
+  list.innerHTML = tasks.length ? tasks.map(t => `
+    <div class="task">
+      <div class="task-left">
+        <input type="checkbox" ${t.done?"checked":""} data-task="${t._id}">
+        <div><b style="${t.done?"text-decoration:line-through;color:#94a3b8":""}">${escapeHtml(t.name)}</b><div class="muted" style="font-size:12px">${t.date||"No date"}</div></div>
+      </div>
+      <button class="btn danger" data-delete="${t._id}">Delete</button>
+    </div>`).join("") : `<p class="muted">No study tasks yet. Add your first task above.</p>`;
+
+  $$("[data-task]").forEach(c => c.onchange = async () => {
+    try { await api(`/tasks/${c.dataset.task}`, { method: "PATCH", body: { done: c.checked } }); await loadTasks(); await loadDashboard(); }
+    catch (err) { toast(err.message); }
+  });
+  $$("[data-delete]").forEach(b => b.onclick = async () => {
+    try { await api(`/tasks/${b.dataset.delete}`, { method: "DELETE" }); await loadTasks(); await loadDashboard(); }
+    catch (err) { toast(err.message); }
+  });
+
+  const done = tasks.filter(t=>t.done).length, total = tasks.length;
+  const p = total ? Math.round(done/total*100) : 0;
+  $("#taskCount").textContent = `${done}/${total}`;
+  $("#plannerProgress").textContent = p + "%";
+  $("#plannerBar").style.width = p + "%";
+}
+
+/* ---------------- Dashboard ---------------- */
+async function loadDashboard(){
+  let d;
+  try { d = await api("/dashboard"); } catch (err) { toast(err.message); return; }
+
+  $("#dashStreak").textContent = `${d.studyStreakDays} day${d.studyStreakDays===1?"":"s"}`;
+  $("#dashScore").textContent = d.quizAverage===null ? "—" : d.quizAverage + "%";
+  $("#taskCount").textContent = `${d.tasksCompleted}/${d.tasksTotal}`;
+  $("#dashMastery").textContent = d.quizAverage===null ? "—" : d.quizAverage>=80?"Excellent":d.quizAverage>=60?"Good":"Needs work";
+
+  const box = $("#subjectProgress");
+  if (!d.subjectProgress.length) {
+    box.innerHTML = `<p class="muted">No quiz attempts yet — take a quiz to see progress by subject.</p>`;
+  } else {
+    box.innerHTML = d.subjectProgress.map(s => `
+      <div class="bar-row"><div class="bar-head"><span>${escapeHtml(s.subject)}</span><b>${s.average}%</b></div><div class="progress"><i style="width:${s.average}%"></i></div></div>
+    `).join("");
+  }
+}
+
+/* ---------------- Session restore on load ---------------- */
+async function restoreSession(){
+  if (!token) return;
+  try {
+    const data = await api("/auth/me");
+    await openApp(data.user);
+  } catch (err) {
+    token = null; currentUser = null;
+    localStorage.removeItem("studymate_token");
+    localStorage.removeItem("studymate_user");
+  }
+}
+
+if (currentUser) {
+  $("#signupView").classList.add("hidden");
+  $("#loginView").classList.remove("hidden");
+  $("#signupTab").className="btn soft";
+  $("#loginTab").className="btn primary";
+}
+
+const h=new Date().getHours();$("#greeting").textContent=(h<12?"Good morning":h<17?"Good afternoon":"Good evening")+"!";
+
+/* ---------------- PWA install prompt ---------------- */
+let deferredInstallPrompt = null;
+let installBannerShownThisSession = false;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+});
+
+window.addEventListener("appinstalled", () => {
+  $("#installBanner").classList.add("hidden");
+  deferredInstallPrompt = null;
+  toast("StudyMate installed!");
+});
+
+function isStandalone(){
+  return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+}
+function isIos(){
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+}
+
+function maybeShowInstallBanner(){
+  if (isStandalone() || installBannerShownThisSession) return;
+
+  if (deferredInstallPrompt) {
+    installBannerShownThisSession = true;
+    $("#installBannerText").textContent = "Add it to your home screen for quick, full-screen access.";
+    $("#installBanner").classList.remove("hidden");
+  } else if (isIos()) {
+    installBannerShownThisSession = true;
+    $("#installBannerText").textContent = "Tap the Share icon, then \"Add to Home Screen\".";
+    $("#installAccept").classList.add("hidden");
+    $("#installBanner").classList.remove("hidden");
+  }
+}
+
+$("#installAccept").onclick = async () => {
+  $("#installBanner").classList.add("hidden");
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+};
+$("#installDismiss").onclick = () => $("#installBanner").classList.add("hidden");
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+
+restoreSession();
+</script>
+</body>
+</html>
