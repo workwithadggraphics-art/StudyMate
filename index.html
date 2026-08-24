@@ -160,6 +160,7 @@ input,select{width:100%;padding:12px 13px;border:1px solid var(--line);border-ra
 <div class="hero"><div><h1>Quiz Results</h1><p>See what you know and what needs more attention.</p></div></div>
 <div class="grid two"><div class="card" style="text-align:center"><div class="score" id="scoreCircle">—</div><h2 id="resultTitle">No quiz taken yet</h2><p class="muted" id="resultText">Take a quiz to see your results here.</p></div>
 <div class="card"><h2 class="section-title">Capability analysis</h2><div class="bar-row"><div class="bar-head"><span>Strong topics</span><b id="strongPct">0%</b></div><div class="progress"><i id="strongBar" style="width:0%"></i></div></div><div class="bar-row"><div class="bar-head"><span>Needs attention</span><b id="weakPct">0%</b></div><div class="progress"><i id="weakBar" style="width:0%"></i></div></div><p class="muted" id="weakTopics">Take a quiz to see a breakdown.</p></div></div>
+<div class="card" id="reviewCard" style="margin-top:18px"><h2 class="section-title">Question review</h2><div id="reviewList"><p class="muted">Take a quiz to see which answers you got right or wrong.</p></div></div>
 </section>
 
 <section id="planner" class="page">
@@ -343,7 +344,7 @@ $("#processBtn").onclick = async () => {
   if (!selectedFile) return;
   setAuthError("#processError", null);
   const btn = $("#processBtn");
-  btn.disabled = true; $("#processLabel").innerHTML = '<span class="spinner"></span>Reading with Grok…';
+  btn.disabled = true; $("#processLabel").innerHTML = '<span class="spinner"></span>Reading with Gemini…';
 
   try {
     const form = new FormData();
