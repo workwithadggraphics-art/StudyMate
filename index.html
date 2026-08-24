@@ -409,6 +409,18 @@ async function finishQuiz(){
     $("#strongBar").style.width = pct + "%";
     $("#weakBar").style.width = weak + "%";
     $("#weakTopics").textContent = weak ? "Review the questions you missed, then try another practice round." : "Great! Try a harder quiz to deepen your mastery.";
+
+    $("#reviewList").innerHTML = currentQuiz.questions.map((q, i) => {
+      const picked = answers[i];
+      const optionsHtml = q.o.map((opt, idx) => {
+        let cls = "option";
+        if (idx === q.a) cls += " correct";
+        else if (idx === picked) cls += " wrong";
+        return `<div class="${cls}">${escapeHtml(opt)}${idx===q.a?" ✓":""}${idx===picked&&idx!==q.a?" ✗":""}</div>`;
+      }).join("");
+      return `<div style="margin-bottom:18px"><div class="quiz-question" style="font-size:15px">Q${i+1}. ${escapeHtml(q.q)}</div><div class="options">${optionsHtml}</div></div>`;
+    }).join("");
+
     showPage("results");
     toast("Quiz completed!");
     renderQuestion(); // reset quiz page for a retake view
