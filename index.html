@@ -406,19 +406,22 @@ $$(".nav button[data-page='quiz']").forEach(b => b.addEventListener("click", () 
 
 function renderQuestion(){
   const q = currentQuiz.questions[quizIndex];
-  $("#quizBox").innerHTML = `<div class="muted" style="margin-bottom:10px">Question ${quizIndex+1} of ${currentQuiz.questions.length}</div><div class="quiz-question">${escapeHtml(q.q)}</div><div class="options">${q.o.map((x,i)=>`<button class="option" data-i="${i}">${escapeHtml(x)}</button>`).join("")}</div><div style="margin-top:18px;display:flex;justify-content:flex-end"><button class="btn primary" id="nextQ" disabled>${quizIndex===currentQuiz.questions.length-1?"Finish quiz":"Next question"}</button></div>`;
+  const selected = answers[quizIndex];
+  $("#quizBox").innerHTML = `<div class="muted" style="margin-bottom:10px">Question ${quizIndex+1} of ${currentQuiz.questions.length}</div><div class="quiz-question">${escapeHtml(q.q)}</div><div class="options">${q.o.map((x,i)=>`<button class="option${selected===i?' selected':''}" data-i="${i}">${escapeHtml(x)}</button>`).join("")}</div><div style="margin-top:18px;display:flex;justify-content:space-between;gap:10px"><button class="btn soft" id="prevQ" ${quizIndex===0?"disabled":""}>Previous</button><button class="btn primary" id="nextQ" ${selected===undefined?"disabled":""}>${quizIndex===currentQuiz.questions.length-1?"Finish quiz":"Next question"}</button></div>`;
   $$(".option").forEach(b=>b.onclick=()=>{
     $$(".option").forEach(x=>x.classList.remove("selected"));
     b.classList.add("selected");
     answers[quizIndex]=+b.dataset.i;
     $("#nextQ").disabled=false;
   });
+  $("#prevQ").onclick=()=>{
+    if(quizIndex>0){quizIndex--;renderQuestion()}
+  };
   $("#nextQ").onclick=()=>{
     if(quizIndex<currentQuiz.questions.length-1){quizIndex++;renderQuestion()}
     else finishQuiz();
   };
 }
-
 async function finishQuiz(){
   $("#quizBox").innerHTML = '<p class="muted"><span class="spinner" style="border-color:rgba(37,99,235,.3);border-top-color:var(--blue)"></span>Scoring your quiz…</p>';
   try {
